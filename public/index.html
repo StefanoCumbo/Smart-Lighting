@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home Lighting System</title>
+    <script>
+        function fetchLightStatus() {
+            fetch('/update-status')
+                .then(response => response.json())
+                .then(status => {
+                    document.getElementById('light-status').innerText = `Lights are ${status.command}`;
+                });
+        }
+
+        setInterval(fetchLightStatus, 500); // Fetch light status every second
+    </script>
+</head>
+<body>
+    <h1>Smart Home Lighting System</h1>
+    <p id="light-status">Fetching light status...</p>
+</body>
+</html>
