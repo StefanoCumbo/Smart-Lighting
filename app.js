@@ -12,7 +12,7 @@ const port = 3000;
 connectDB();
 
 // MQTT setup
-const mqttClient = mqtt.connect('mqtt://broker.hivemq.com:1883');
+const mqttClient = mqtt.connect('http://MyLoadBalancer-319821575.us-east-1.elb.amazonaws.com/update-status');
 const motionTopic = 'home/lighting/motion';
 const lightControlTopic = 'lights/control'; // MQTT topic for light control
 
@@ -42,7 +42,11 @@ mqttClient.on('message', (topic, message) => {
 // Serve static HTML page on the default route
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+// Endpoint to handle motion detection and light status updates
+app.get('/update-status', (req, res) => {
+    console.log(`Motion Detected: ${motionDetected}, Light Status: ${lightStatus}`);
+    res.json({ motionDetected, command: lightStatus }); // Send the status as JSON response
+});
 
 // Simulate motion detection based on random numbers
 const threshold = 0.7; // Set your threshold value here
@@ -80,3 +84,4 @@ setInterval(async () => {
 app.listen(port, () => {
     console.log(`Smart home lighting system running at http://localhost:${port}`);
 });
+
